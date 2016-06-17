@@ -7,16 +7,19 @@ import os
 
 curDir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
+def screenShot():
+	subprocess.call(["scrot", "ss.png"])
+        with open(curDir + 'ss.png','r') as f:
+                print "sending photo"
+                response = bot.sendPhoto(158951306,f)
+
 def handle(msg):
     pprint.pprint(msg)
     msg = msg['text'].lower()
     # Do your stuff here ...
     if msg == 'screenshot':
 	print "taking ss"
-	subprocess.call(["scrot", "ss.png"])
-	with open(curDir + 'ss.png','r') as f:
-		print "sending photo"
-		response = bot.sendPhoto(158951306,f)
+	screenShot()
 	
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
