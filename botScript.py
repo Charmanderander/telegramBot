@@ -4,6 +4,7 @@ import pprint
 import telepot
 import subprocess
 import os
+from guitarTrawl import *
 
 curDir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
@@ -13,14 +14,29 @@ def screenShot():
                 print "sending photo"
                 response = bot.sendPhoto(158951306,f)
 
+def guitarTab(song):
+	chords = getChords(song)
+
+	with open ('chords.txt','w') as f:
+		for item in chords:
+			f.write(item+"\n")
+	with open ('chords.txt','r') as f:
+		response = bot.sendDocument(158951306,f)
+	
+	
+
 def handle(msg):
     pprint.pprint(msg)
-    msg = msg['text'].lower()
+    msg = msg['text'].lower().split()
     # Do your stuff here ...
-    if msg == 'screenshot':
+    if msg[0] == 'screenshot':
 	print "taking ss"
 	screenShot()
-	
+    if msg[0] == 'tab':
+	if len(msg) > 1:
+		guitarTab(msg[1])
+	else:
+		print "please provide song"
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
 TOKEN = sys.argv[1]
