@@ -8,33 +8,39 @@ from guitarTrawl import *
 
 curDir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
-def screenShot():
+def screenShot(uid):
 	subprocess.call(["scrot", "ss.png"])
         with open(curDir + 'ss.png','r') as f:
                 print "sending photo"
-                response = bot.sendPhoto(158951306,f)
+                response = bot.sendPhoto(uid,f)
 
-def guitarTab(song):
+def guitarTab(song,uid):
+	print 'passing in ' + song
 	chords = getChords(song)
 
 	with open ('chords.txt','w') as f:
 		for item in chords:
 			f.write(item+"\n")
 	with open ('chords.txt','r') as f:
-		response = bot.sendDocument(158951306,f)
+		response = bot.sendDocument(uid,f)
+
+	os.remove("chords.txt")
+
 	
 	
 
 def handle(msg):
     pprint.pprint(msg)
-    msg = msg['text'].lower().split()
+    uid = msg['from']['id']
+    text = msg['text'].lower().split()
+    
     # Do your stuff here ...
-    if msg[0] == 'screenshot':
+    if text[0] == 'screenshot':
 	print "taking ss"
-	screenShot()
-    if msg[0] == 'tab':
+	screenShot(uid)
+    if text[0] == 'tab':
 	if len(msg) > 1:
-		guitarTab(msg[1])
+		guitarTab(text[1],uid)
 	else:
 		print "please provide song"
 # Getting the token from command-line is better than embedding it in code,

@@ -57,6 +57,9 @@ def getPageContent(site):
 
 
 def getChords(song):
+	global songLinks
+	global chords
+	print song
 	linkGetter = HTMLParserForLinks()
 	songSelector = HTMLParserForSongs()
 
@@ -72,8 +75,11 @@ def getChords(song):
 		songSelector.feed(content)
 		print songLink
 		break
+	songLinks = []
 
-	return chords
+	tempChords = chords
+	chords = []
+	return tempChords
 
 
 
