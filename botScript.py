@@ -40,7 +40,10 @@ def handle(msg):
 	screenShot(uid)
     if text[0] == 'tab':
 	if len(msg) > 1:
-		guitarTab(text[1],uid)
+		song = ''
+		for item in text[1:]:
+			song = song + ' ' + item
+		guitarTab(song,uid)
 	else:
 		print "please provide song"
 # Getting the token from command-line is better than embedding it in code,
