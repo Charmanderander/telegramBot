@@ -5,28 +5,36 @@ import telepot
 import subprocess
 import os
 from guitarTrawl import *
+from allowedUsers import *
 
 curDir = os.path.dirname(os.path.realpath(__file__)) + '/'
 
+
+
 def screenShot(uid):
-	subprocess.call(["scrot", "ss.png"])
-        with open(curDir + 'ss.png','r') as f:
-                print "sending photo"
-                response = bot.sendPhoto(uid,f)
+	if isSuperUser(uid):
+		print "is super user!"
+		bot.sendMessage(uid,"Taking a screenshot, hold on...")
+		subprocess.call(["scrot", "ss.png"])
+        	with open(curDir + 'ss.png','r') as f:
+                	print "sending photo"
+                	bot.sendPhoto(uid,f)
+	else:
+		print "not super user"
+		bot.sendMessage(uid,"You are not a superuser!")
 
 def guitarTab(song,uid):
-	print 'passing in ' + song
-	chords = getChords(song)
+	bot.sendMessage(uid,"Finding guitar chords. Hold on...")
+	chords, link = getChords(song)
 
 	with open ('chords.txt','w') as f:
 		for item in chords:
 			f.write(item+"\n")
 	with open ('chords.txt','r') as f:
-		response = bot.sendDocument(uid,f)
+		bot.sendMessage(uid,"We found a link: "+ link + ".\nHere are the chords: ")
+		bot.sendDocument(uid,f)
 
 	os.remove("chords.txt")
-
-	
 	
 
 def handle(msg):
@@ -46,6 +54,7 @@ def handle(msg):
 		guitarTab(song,uid)
 	else:
 		print "please provide song"
+
 # Getting the token from command-line is better than embedding it in code,
 # because tokens are supposed to be kept secret.
 TOKEN = sys.argv[1]

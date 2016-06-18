@@ -1,2 +1,4 @@
-key.txt
+*.txt
 *.pyc
+allowedUsers.py
+*.png

@@ -73,13 +73,13 @@ def getChords(song):
 	for songLink in songLinks:
 		content = getPageContent(songLink)
 		songSelector.feed(content)
-		print songLink
+		firstSongLink = songLink
 		break
 	songLinks = []
 
 	tempChords = chords
 	chords = []
-	return tempChords
+	return tempChords, firstSongLink
 
 
 
